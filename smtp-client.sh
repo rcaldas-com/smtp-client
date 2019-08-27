@@ -10,7 +10,21 @@ source .env
 # DOMAIN='domain.com'
 # ADMIN_MAIL='your@mail.com'
 
+### Set /etc/mailname
+sudo echo "$DOMAIN" > /etc/mailname
+
+### /etc/mail.rc
+
+
+### ~/.mailrc
+
+
 ### Set MAILTO in crontab, replace if exist or add at top:
 grep -q 'MAILTO=' /etc/crontab && \
   sudo sed -i "/MAILTO=/c\MAILTO=$ADMIN_MAIL" /etc/crontab || \
   sudo sed -i "1iMAILTO=$ADMIN_MAIL" /etc/crontab
+
+
+### With exim4
+### With postfix
+### With msmtp
