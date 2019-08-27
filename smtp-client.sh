@@ -9,3 +9,8 @@ source .env
 # SMTP_TLS=1
 # DOMAIN='domain.com'
 # ADMIN_MAIL='your@mail.com'
+
+### Set MAILTO in crontab, replace if exist or add at top:
+grep -q 'MAILTO=' /etc/crontab && \
+  sudo sed -i "/MAILTO=/c\MAILTO=$ADMIN_MAIL" /etc/crontab || \
+  sudo sed -i "1iMAILTO=$ADMIN_MAIL" /etc/crontab
