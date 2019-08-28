@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 ### SMTP client for command line ### @RCaldas84
 
+### Get current script dir
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
 ### Load settings from .env file or uncomment next:
-source .env
+source $DIR/.env
 # SMTP_SERVER='server.domain'
 # SMTP_PORT=587
 # SMTP_USER='user@mail.com'
