@@ -22,12 +22,6 @@ if ! dpkg -s postfix &> /dev/null; then
   sudo apt install -y postfix
 fi
 
-### Set sasl_passwd file
-echo "[$SMTP_SERVER]:$SMTP_PORT $SMTP_USER:$SMTP_PWD" | \
-  sudo tee /etc/postfix/sasl_passwd >/dev/null
-sudo chmod 600 /etc/postfix/sasl_passwd
-sudo postmap /etc/postfix/sasl_passwd
-
 ### Set main.cf file
 [ ! -e /etc/postfix/main.cf.bkp ] && \
   sudo cp /etc/postfix/main.cf /etc/postfix/main.cf.bkp
@@ -42,6 +36,12 @@ smtp_use_tls = yes
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
 mynetworks_style = host
 EOF
+
+### Set sasl_passwd file
+echo "[$SMTP_SERVER]:$SMTP_PORT $SMTP_USER:$SMTP_PWD" | \
+  sudo tee /etc/postfix/sasl_passwd >/dev/null
+sudo chmod 600 /etc/postfix/sasl_passwd
+sudo postmap /etc/postfix/sasl_passwd
 
 ### Set MAILTO in crontab, replace if exist or add at top:
 grep -q 'MAILTO=' /etc/crontab && \
