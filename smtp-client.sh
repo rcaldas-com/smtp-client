@@ -16,6 +16,12 @@ source $DIR/.env
 ### Set /etc/mailname
 echo "$DOMAIN" | sudo tee /etc/mailname >/dev/null
 
+### Create root alias
+grep -q '^root:' /etc/aliases && \
+  sudo sed -i "/^root:/c\root: $ADMIN_MAIL" /etc/aliases || \
+  echo "root: $ADMIN_MAIL" | sudo tee -a /etc/aliases >/dev/null
+sudo newaliases
+
 ### Check fot postfix package
 if ! dpkg -s postfix &> /dev/null; then
   sudo apt update
