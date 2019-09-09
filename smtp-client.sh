@@ -16,17 +16,19 @@ source "$DIR/.env"
 ### Set /etc/mailname
 echo "$DOMAIN" | sudo tee /etc/mailname >/dev/null
 
+### Check for packages
+for p in 'postfix' 'mailutils'; do
+  if ! dpkg -s "$p" &> /dev/null; then
+    sudo apt update
+    sudo apt install -y "$p"
+  fi
+done
+
 ### Create root alias
 grep -q '^root:' /etc/aliases && \
   sudo sed -i "/^root:/c\root: $ADMIN_MAIL" /etc/aliases || \
   echo "root: $ADMIN_MAIL" | sudo tee -a /etc/aliases >/dev/null
 sudo newaliases
-
-### Check fot postfix package
-if ! dpkg -s postfix &> /dev/null; then
-  sudo apt update
-  sudo apt install -y postfix
-fi
 
 ### Set main.cf file
 [ ! -e /etc/postfix/main.cf.bkp ] && \
